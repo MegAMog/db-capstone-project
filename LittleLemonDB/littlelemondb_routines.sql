@@ -116,6 +116,34 @@ SET character_set_client = @saved_cs_client;
 --
 -- Dumping routines for database 'littlelemondb'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `AddValidBooking` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`little_lemon_admin`@`%` PROCEDURE `AddValidBooking`(booking_date DATE, booking_slot TIME(0), table_no INT, customer_id INT)
+BEGIN
+call littlelemondb.CheckBooking(booking_date, booking_slot, table_no, @table_status);
+
+START TRANSACTION;
+INSERT INTO bookings (BookingDate,BookingSlot,TableNo,CustomerID) 
+VALUES (booking_date, booking_slot, table_no, customer_id);
+
+IF @table_status IS NOT NULL THEN ROLLBACK;
+ELSE COMMIT;
+END IF;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `CancelOrder` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -129,6 +157,30 @@ DELIMITER ;;
 CREATE DEFINER=`little_lemon_admin`@`%` PROCEDURE `CancelOrder`(order_id INT, item_id INT)
 BEGIN
 DELETE FROM orderhistory WHERE OrderID=order_id AND ItemID=item_id;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `CheckBooking` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`little_lemon_admin`@`%` PROCEDURE `CheckBooking`(booking_date DATE, booking_slot TIME(0), table_no INT, OUT status VARCHAR(255))
+BEGIN
+SELECT CONCAT(TableNo, ' is already booked.') INTO status
+FROM bookings
+WHERE 
+BookingDate=booking_date
+AND BookingSlot BETWEEN (booking_slot - INTERVAL 60 MINUTE) AND (booking_slot + INTERVAL 60 MINUTE)
+AND TableNo=table_no; 
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -165,4 +217,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-27 10:42:51
+-- Dump completed on 2024-01-27 13:58:05
