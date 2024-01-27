@@ -29,7 +29,7 @@ CREATE TABLE `customers` (
   `ContactNumber` int NOT NULL,
   `Email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`CustomerID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,7 @@ CREATE TABLE `customers` (
 
 LOCK TABLES `customers` WRITE;
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+INSERT INTO `customers` VALUES (1,'Anna','Ivanova',79460999,'annamail@gmail.com'),(2,'Kate','Smith',79460989,NULL),(3,'Joe','Smith',72546099,'joemail@gmail.com'),(4,'Bill','Willson',73468888,NULL);
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-25 16:35:55
+-- Dump completed on 2024-01-27 10:42:50
