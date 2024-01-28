@@ -16,38 +16,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `orderhistory`
+-- Table structure for table `menu`
 --
 
-DROP TABLE IF EXISTS `orderhistory`;
+DROP TABLE IF EXISTS `menu`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `orderhistory` (
-  `OrderID` int NOT NULL,
-  `ItemID` int NOT NULL,
-  `OrderDate` datetime NOT NULL,
-  `Quantity` int NOT NULL,
-  `Status` varchar(45) NOT NULL,
-  `TableNo` int NOT NULL,
-  `BookingID` int DEFAULT NULL,
-  `StaffID` int NOT NULL,
-  PRIMARY KEY (`OrderID`,`ItemID`),
-  KEY `booking_id_fk_idx` (`BookingID`),
-  KEY `item_id_dk_idx` (`ItemID`),
-  KEY `staff_id_fk_idx` (`StaffID`),
-  CONSTRAINT `booking_id_fk` FOREIGN KEY (`BookingID`) REFERENCES `bookings` (`BookingID`) ON UPDATE CASCADE,
-  CONSTRAINT `item_id_dk` FOREIGN KEY (`ItemID`) REFERENCES `menuitems` (`ItemID`) ON UPDATE CASCADE,
-  CONSTRAINT `staff_id_fk` FOREIGN KEY (`StaffID`) REFERENCES `staff` (`StaffID`) ON UPDATE CASCADE
+CREATE TABLE `menu` (
+  `MenuID` int NOT NULL,
+  `Cuisine` varchar(100) NOT NULL,
+  PRIMARY KEY (`MenuID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `orderhistory`
+-- Dumping data for table `menu`
 --
 
-LOCK TABLES `orderhistory` WRITE;
-/*!40000 ALTER TABLE `orderhistory` DISABLE KEYS */;
-/*!40000 ALTER TABLE `orderhistory` ENABLE KEYS */;
+LOCK TABLES `menu` WRITE;
+/*!40000 ALTER TABLE `menu` DISABLE KEYS */;
+/*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -59,4 +47,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-28 20:38:39
+-- Dump completed on 2024-01-28 22:15:13

@@ -16,28 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tables`
+-- Table structure for table `customers`
 --
 
-DROP TABLE IF EXISTS `tables`;
+DROP TABLE IF EXISTS `customers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tables` (
-  `TableNo` int NOT NULL,
-  `Capacity` int NOT NULL,
-  `IsInside` tinyint NOT NULL,
-  PRIMARY KEY (`TableNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `customers` (
+  `CustomerID` int NOT NULL AUTO_INCREMENT,
+  `FirstName` varchar(255) NOT NULL,
+  `LastName` varchar(255) NOT NULL,
+  `ContactNumber` int NOT NULL,
+  `Email` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`CustomerID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tables`
+-- Dumping data for table `customers`
 --
 
-LOCK TABLES `tables` WRITE;
-/*!40000 ALTER TABLE `tables` DISABLE KEYS */;
-INSERT INTO `tables` VALUES (1,2,1),(2,2,1),(3,10,1),(4,6,1),(5,6,1),(6,5,1);
-/*!40000 ALTER TABLE `tables` ENABLE KEYS */;
+LOCK TABLES `customers` WRITE;
+/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+INSERT INTO `customers` VALUES (1,'Anna','Ivanova',79460999,'annamail@gmail.com'),(2,'Kate','Smith',79460989,NULL),(3,'Joe','Smith',72546099,'joemail@gmail.com'),(4,'Bill','Willson',73468888,NULL);
+/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -49,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-28 20:38:39
+-- Dump completed on 2024-01-28 22:15:13
