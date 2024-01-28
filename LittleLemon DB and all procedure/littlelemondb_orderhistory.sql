@@ -16,30 +16,38 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `staff`
+-- Table structure for table `orderhistory`
 --
 
-DROP TABLE IF EXISTS `staff`;
+DROP TABLE IF EXISTS `orderhistory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `staff` (
-  `StaffID` int NOT NULL AUTO_INCREMENT,
-  `FirstName` varchar(255) NOT NULL,
-  `LastName` varchar(255) NOT NULL,
-  `Role` varchar(255) NOT NULL,
-  `ContactNumber` int NOT NULL,
-  `Email` varchar(255) NOT NULL,
-  PRIMARY KEY (`StaffID`)
+CREATE TABLE `orderhistory` (
+  `OrderID` int NOT NULL,
+  `ItemID` int NOT NULL,
+  `OrderDate` datetime NOT NULL,
+  `Quantity` int NOT NULL,
+  `Status` varchar(45) NOT NULL,
+  `TableNo` int NOT NULL,
+  `BookingID` int DEFAULT NULL,
+  `StaffID` int NOT NULL,
+  PRIMARY KEY (`OrderID`,`ItemID`),
+  KEY `booking_id_fk_idx` (`BookingID`),
+  KEY `item_id_dk_idx` (`ItemID`),
+  KEY `staff_id_fk_idx` (`StaffID`),
+  CONSTRAINT `booking_id_fk` FOREIGN KEY (`BookingID`) REFERENCES `bookings` (`BookingID`) ON UPDATE CASCADE,
+  CONSTRAINT `item_id_dk` FOREIGN KEY (`ItemID`) REFERENCES `menuitems` (`ItemID`) ON UPDATE CASCADE,
+  CONSTRAINT `staff_id_fk` FOREIGN KEY (`StaffID`) REFERENCES `staff` (`StaffID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `staff`
+-- Dumping data for table `orderhistory`
 --
 
-LOCK TABLES `staff` WRITE;
-/*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-/*!40000 ALTER TABLE `staff` ENABLE KEYS */;
+LOCK TABLES `orderhistory` WRITE;
+/*!40000 ALTER TABLE `orderhistory` DISABLE KEYS */;
+/*!40000 ALTER TABLE `orderhistory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-28 20:38:39
+-- Dump completed on 2024-01-28 22:15:13

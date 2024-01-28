@@ -114,6 +114,10 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Dumping events for database 'littlelemondb'
+--
+
+--
 -- Dumping routines for database 'littlelemondb'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `AddValidBooking` */;
@@ -231,6 +235,106 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `ManageBooking` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`little_lemon_admin`@`%` PROCEDURE `ManageBooking`(booking_id INT, new_booking_slot TIME(0))
+BEGIN
+DECLARE booking_date DATE;
+DECLARE table_no INT;
+DECLARE slot_status VARCHAR(255);
+    
+IF EXISTS(SELECT BookingID FROM bookings WHERE BookingID=booking_id ) THEN  
+
+
+	SELECT BookingDate INTO booking_date FROM bookings WHERE BookingID=booking_id;
+	SELECT TableNo INTO table_no FROM bookings WHERE BookingID=booking_id;
+
+	SELECT CONCAT('Table', TableNo,' is already booked for new time.') INTO slot_status
+	FROM bookings
+	WHERE 
+	BookingDate=booking_date
+	AND TableNo=table_no
+	AND BookingID<>booking_id
+	AND BookingSlot BETWEEN (new_booking_slot - INTERVAL 60 MINUTE) AND (new_booking_slot + INTERVAL 60 MINUTE)
+	AND TableNo=table_no; 
+
+	IF slot_status IS NULL THEN 
+		UPDATE bookings
+		SET BookingSlot=new_booking_slot
+		WHERE BookingID=booking_id;
+		
+		SELECT CONCAT("Booking ", booking_id, " was updated.");
+		
+	ELSE SELECT slot_status;
+	END IF;
+    
+ELSE SELECT CONCAT("There is no such Booking as ", booking_id, ".");
+END IF;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `UpdateBooking` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`little_lemon_admin`@`%` PROCEDURE `UpdateBooking`(booking_id INT, new_booking_slot TIME(0))
+BEGIN
+DECLARE booking_date DATE;
+DECLARE table_no INT;
+DECLARE slot_status VARCHAR(255);
+    
+IF EXISTS(SELECT BookingID FROM bookings WHERE BookingID=booking_id ) THEN  
+
+
+	SELECT BookingDate INTO booking_date FROM bookings WHERE BookingID=booking_id;
+	SELECT TableNo INTO table_no FROM bookings WHERE BookingID=booking_id;
+
+	SELECT CONCAT('Table', TableNo,' is already booked for new time.') INTO slot_status
+	FROM bookings
+	WHERE 
+	BookingDate=booking_date
+	AND TableNo=table_no
+	AND BookingID<>booking_id
+	AND BookingSlot BETWEEN (new_booking_slot - INTERVAL 60 MINUTE) AND (new_booking_slot + INTERVAL 60 MINUTE)
+	AND TableNo=table_no; 
+
+	IF slot_status IS NULL THEN 
+		UPDATE bookings
+		SET BookingSlot=new_booking_slot
+		WHERE BookingID=booking_id;
+		
+		SELECT CONCAT("Booking ", booking_id, " was updated.");
+		
+	ELSE SELECT slot_status;
+	END IF;
+    
+ELSE SELECT CONCAT("There is no such Booking as ", booking_id, ".");
+END IF;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `UpdateBookingSetNewTimeTable` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -291,4 +395,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-28 20:38:39
+-- Dump completed on 2024-01-28 22:15:13
